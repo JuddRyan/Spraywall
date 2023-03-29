@@ -1,5 +1,6 @@
+import { Button } from '@mui/material';
 import { useState } from 'react';
-import { Circle, Layer, Stage } from 'react-konva';
+import { Circle, Group, Image, Layer, Stage } from 'react-konva';
 import '../App.css';
 
 function CreateRoute() {
@@ -44,42 +45,54 @@ function CreateRoute() {
 	};
 
 	return (
-		<div className="App">
+		<div className="content">
 			<div>
 				<input
 					type="text"
 					onChange={(e) => setLoadInput(e.currentTarget.value)}
 				/>
-				<button onClick={handleLoad}>Load</button>
-				<button onClick={handleSave}>Save</button>
-				<button onClick={handleCopy}>Copy</button>
+				<Button variant="outlined" onClick={handleLoad}>
+					Load
+				</Button>
+				<Button variant="outlined" onClick={handleSave}>
+					Save
+				</Button>
+				<Button variant="outlined" onClick={handleCopy}>
+					Copy
+				</Button>
 			</div>
-			<br />
 			<div>
-				<button onClick={handleHandsButton}>Hands</button>
-				<button onClick={handleFeetButton}>Feet</button>
+				<Button variant="outlined" onClick={handleHandsButton}>
+					Hands
+				</Button>
+				<Button variant="outlined" onClick={handleFeetButton}>
+					Feet
+				</Button>
 			</div>
-			<Stage
-				width={500}
-				height={500}
-				className="templateBox"
-				onPointerDown={handlePointerDown}
-			>
-				<Layer>
-					{circles.map((circle, i) => (
-						<Circle
-							key={i}
-							x={circle.position[0]}
-							y={circle.position[1]}
-							stroke={circle.strokeColor}
-							strokeWidth={5}
-							// fill="#fff"
-							draggable
-							radius={10}
-						></Circle>
-					))}
-				</Layer>
-			</Stage>
+			<Group>
+				<Image image={'../assets/spraywall.png'} />
+				<Stage
+					width={500}
+					height={500}
+					className="templateBox"
+					onPointerDown={handlePointerDown}
+				>
+					<Layer>
+						{circles.map((circle, i) => (
+							<Circle
+								key={i}
+								x={circle.position[0]}
+								y={circle.position[1]}
+								stroke={circle.strokeColor}
+								strokeWidth={5}
+								// fill="#fff"
+								draggable
+								radius={10}
+							></Circle>
+						))}
+					</Layer>
+				</Stage>
+			</Group>
 		</div>
 	);
 }
