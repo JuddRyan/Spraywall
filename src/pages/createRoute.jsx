@@ -1,17 +1,34 @@
-import { Button } from '@mui/material';
+import styled from '@emotion/styled';
+import { Button, Slider } from '@mui/material';
 import { useState } from 'react';
 import { Circle, Group, Image, Layer, Stage } from 'react-konva';
+
+const FlexDiv = styled.div`
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: center;
+	align-items: center;
+`;
 
 function CreateRoute() {
 	const [circles, setCircles] = useState([]);
 	const [strokeColor, setStrokeColor] = useState('#f15');
+	const [circleRadius, setCircleRadius] = useState(15);
+
 	const [loadInput, setLoadInput] = useState('');
+	const [editMode, setEditMode] = useState(false);
 
 	const handlePointerDown = (e) => {
+		if (!editMode) return;
+
 		const pos = e.target.getStage().getPointerPosition();
 		setCircles([
 			...circles,
-			{ position: [pos.x, pos.y], strokeColor: strokeColor },
+			{
+				position: [pos.x, pos.y],
+				strokeColor: strokeColor,
+				circleRadius: circleRadius,
+			},
 		]);
 	};
 
@@ -43,6 +60,10 @@ function CreateRoute() {
 		navigator.clipboard.writeText('this is a test');
 	};
 
+	const handleEditButton = () => {
+		setEditMode(!editMode);
+	};
+
 	return (
 		<div className="content">
 			<div>
@@ -60,38 +81,56 @@ function CreateRoute() {
 					Copy
 				</Button>
 			</div>
-			<div>
-				<Button variant="outlined" onClick={handleHandsButton}>
-					Hands
-				</Button>
-				<Button variant="outlined" onClick={handleFeetButton}>
-					Feet
-				</Button>
-			</div>
-			<Group>
-				<Image image={'../assets/spraywall.png'} />
-				<Stage
-					width={500}
-					height={500}
-					className="templateBox"
-					onPointerDown={handlePointerDown}
-				>
-					<Layer>
-						{circles.map((circle, i) => (
-							<Circle
-								key={i}
-								x={circle.position[0]}
-								y={circle.position[1]}
-								stroke={circle.strokeColor}
-								strokeWidth={5}
-								// fill="#fff"
-								draggable
-								radius={10}
-							></Circle>
-						))}
-					</Layer>
-				</Stage>
-			</Group>
+			<FlexDiv>
+				<div>
+					<div>
+						<p>Size:</p>
+						<Slider
+							defaultValue={15}
+							aria-label="Default"
+							valueLabelDisplay="auto"
+							min={5}
+							max={35}
+							onChangeCommitted={(_, value) => setCircleRadius(value)}
+						/>
+					</div>
+					<div>
+						<Button variant="outlined" onClick={handleEditButton}>
+							Edit Mode
+						</Button>
+						<Button variant="outlined" onClick={handleHandsButton}>
+							Hands
+						</Button>
+						<Button variant="outlined" onClick={handleFeetButton}>
+							Feet
+						</Button>
+					</div>
+				</div>
+				<Group>
+					<Image image={'../assets/spraywall.png'} />
+					<Stage
+						width={500}
+						height={500}
+						className="templateBox"
+						onPointerDown={handlePointerDown}
+					>
+						<Layer>
+							{circles.map((circle, i) => (
+								<Circle
+									key={i}
+									x={circle.position[0]}
+									y={circle.position[1]}
+									stroke={circle.strokeColor}
+									strokeWidth={5}
+									// fill="#fff"
+									draggable={false}
+									radius={circle.circleRadius}
+								></Circle>
+							))}
+						</Layer>
+					</Stage>
+				</Group>
+			</FlexDiv>
 		</div>
 	);
 }
