@@ -6,7 +6,6 @@ import {
 	Route,
 	RouterProvider,
 } from 'react-router-dom';
-import './App.css';
 import ResponsiveAppBar from './components/appbar';
 import CreateRoute from './pages/createRoute';
 

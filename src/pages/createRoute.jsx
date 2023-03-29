@@ -1,7 +1,6 @@
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import { Circle, Group, Image, Layer, Stage } from 'react-konva';
-import '../App.css';
 
 function CreateRoute() {
 	const [circles, setCircles] = useState([]);
