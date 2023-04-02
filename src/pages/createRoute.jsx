@@ -64,6 +64,9 @@ function CreateRoute() {
 				<Button variant="outlined" onClick={() => saveRoute(circles)}>
 					Save
 				</Button>
+				<Button variant="outlined" onClick={() => setCircles([])}>
+					Clear
+				</Button>
 			</ButtonGroup>
 			<FlexDiv>
 				<div>
