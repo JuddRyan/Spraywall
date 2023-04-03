@@ -1,18 +1,20 @@
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
-	Link,
 	Outlet,
 	Route,
 	RouterProvider,
 } from 'react-router-dom';
+
 import ResponsiveAppBar from './components/appbar';
 import CreateRoute from './pages/createRoute';
+import Home from './pages/Home';
 
 function App() {
 	const router = createBrowserRouter(
 		createRoutesFromElements(
-			<Route path="/" element={<Root />}>
+			<Route element={<Root />}>
+				<Route path="/" element={<Home />} />
 				<Route path="/createRoute" element={<CreateRoute />} />
 			</Route>
 		)

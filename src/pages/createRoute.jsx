@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
-import { Button, Slider } from '@mui/material';
+import { Button, ButtonGroup, Slider } from '@mui/material';
 import { useState } from 'react';
-import { Circle, Group, Image, Layer, Stage } from 'react-konva';
+import { Circle, Layer, Stage } from 'react-konva';
+
+import loadRoute from '../utils/loadRoute';
+import saveRoute from '../utils/saveRoute';
 
 const FlexDiv = styled.div`
 	display: flex;
@@ -25,7 +28,8 @@ function CreateRoute() {
 		setCircles([
 			...circles,
 			{
-				position: [pos.x, pos.y],
+				x: pos.x,
+				y: pos.y,
 				strokeColor: strokeColor,
 				circleRadius: circleRadius,
 			},
@@ -40,47 +44,30 @@ function CreateRoute() {
 		setStrokeColor('#15f');
 	};
 
-	const handleSave = (e) => {
-		const circlesStringify = JSON.stringify(circles);
-		console.log(circlesStringify.toString('base64'));
-		// using window.btoa instead of only btoa to prevent deprecated error from apearing
-		// this error is only for nodejs and as such can currently be ignored
-		const b64String = window.btoa(circlesStringify);
-		navigator.clipboard.writeText(b64String);
-	};
-
-	const handleLoad = (e) => {
-		const decodedString = window.atob(loadInput);
-
-		const jsonLoad = JSON.parse(decodedString);
-		setCircles(jsonLoad);
-	};
-
-	const handleCopy = () => {
-		navigator.clipboard.writeText('this is a test');
-	};
-
 	const handleEditButton = () => {
 		setEditMode(!editMode);
 	};
 
 	return (
 		<div className="content">
-			<div>
+			<ButtonGroup>
 				<input
 					type="text"
 					onChange={(e) => setLoadInput(e.currentTarget.value)}
 				/>
-				<Button variant="outlined" onClick={handleLoad}>
+				<Button
+					variant="outlined"
+					onClick={() => loadRoute(loadInput, setCircles)}
+				>
 					Load
 				</Button>
-				<Button variant="outlined" onClick={handleSave}>
+				<Button variant="outlined" onClick={() => saveRoute(circles)}>
 					Save
 				</Button>
-				<Button variant="outlined" onClick={handleCopy}>
-					Copy
+				<Button variant="outlined" onClick={() => setCircles([])}>
+					Clear
 				</Button>
-			</div>
+			</ButtonGroup>
 			<FlexDiv>
 				<div>
 					<div>
@@ -106,8 +93,7 @@ function CreateRoute() {
 						</Button>
 					</div>
 				</div>
-				<Group>
-					<Image image={'../assets/spraywall.png'} />
+				<div style={{ backgroundImage: "url('../assets/spraywall.png')" }}>
 					<Stage
 						width={500}
 						height={500}
@@ -118,8 +104,8 @@ function CreateRoute() {
 							{circles.map((circle, i) => (
 								<Circle
 									key={i}
-									x={circle.position[0]}
-									y={circle.position[1]}
+									x={circle.x}
+									y={circle.y}
 									stroke={circle.strokeColor}
 									strokeWidth={5}
 									// fill="#fff"
@@ -129,7 +115,7 @@ function CreateRoute() {
 							))}
 						</Layer>
 					</Stage>
-				</Group>
+				</div>
 			</FlexDiv>
 		</div>
 	);
